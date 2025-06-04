@@ -10,6 +10,7 @@ func (cfg *apiConfig) handlerRedirect(w http.ResponseWriter, r *http.Request) {
 	linkUrl, err := cfg.db.GetLinkByName(r.Context(), linkName)
 	if err != nil {
 		respondWithError(w, http.StatusNotFound, "Unable to find link", err)
+		return
 	}
 
 	http.Redirect(w, r, linkUrl.LinkUrl, http.StatusSeeOther)
