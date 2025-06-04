@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
+	"unicode"
 
 	"github.com/Rodabaugh/pico-link/internal/database"
 	"github.com/google/uuid"
@@ -35,6 +37,19 @@ func (cfg *apiConfig) handlerCreateLink(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Was unable to decode parameters", err)
 		return
+	}
+
+	_, err = url.ParseRequestURI(params.LinkURL)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid URL", err)
+		return
+	}
+
+	for _, c := range params.LinkName {
+		if unicode.IsSpace(c) || unicode.IsSymbol(c) {
+			respondWithError(w, http.StatusBadRequest, "Invalid Name", err)
+			return
+		}
 	}
 
 	link, err := cfg.db.CreateLink(r.Context(), database.CreateLinkParams{
