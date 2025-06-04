@@ -7,6 +7,7 @@ pico-link is a lightweight URL shortener.  There is no authentication yet, and t
 - Having HTMX automatically update the list of links after writing to the database.
 - Dynamically passing the ID of a link to the DELETE /api/links endpoint so the backend can delete the link.
 - Updating the links list after the delete has been performed.
+- Getting the URL from the database, and redirecting to the correct place.
 
 The new link and delete link endpoints check to see if the response should be in JSON and will reply in JSON if it is. This allows the use of a custom client over the API. If the Accept is not set to "application/json", the backend will reply with HTML so HTMX can render it on the page.
 
