@@ -56,14 +56,14 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/admin/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /admin/", func(w http.ResponseWriter, r *http.Request) {
 		MainPage(&apiCfg).Render(r.Context(), w)
 	})
 	mux.HandleFunc("GET /api/links", apiCfg.handlerGetAllLinks)
 	mux.HandleFunc("POST /api/links", apiCfg.handlerCreateLink)
 	mux.HandleFunc("DELETE /api/links/{link_id}", apiCfg.handlerDeleteLink)
 
-	mux.HandleFunc("GET /google", handlerRedirect)
+	mux.HandleFunc("GET /{link_name}", apiCfg.handlerRedirect)
 
 	server := &http.Server{
 		Addr:         ":" + port,
