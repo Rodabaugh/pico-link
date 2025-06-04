@@ -14,10 +14,8 @@ import (
 )
 
 type apiConfig struct {
-	platform  string
-	db        *database.Queries
-	siteTitle string
-	subTitle  string
+	platform string
+	db       *database.Queries
 }
 
 func main() {
@@ -72,6 +70,6 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	log.Printf("Starting pico-link on port: %s\n", port)
+	log.Printf("Starting pico-link in %s mode on port: %s\n", platform, port)
 	log.Fatal(server.ListenAndServe())
 }
