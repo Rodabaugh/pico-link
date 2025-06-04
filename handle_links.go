@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -56,10 +58,19 @@ func (cfg *apiConfig) handlerCreateLink(w http.ResponseWriter, r *http.Request) 
 }
 
 func (cfg *apiConfig) handlerGetAllLinks(w http.ResponseWriter, r *http.Request) {
-	databaseLinks, err := cfg.db.GetAllLinks(r.Context())
+	links, err := cfg.Links()
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Unable to get Links from databaes", err)
+		respondWithError(w, http.StatusInternalServerError, "Unable to get links", err)
 		return
+	}
+
+	respondWithJSON(w, http.StatusOK, links)
+}
+
+func (cfg *apiConfig) Links() ([]Link, error) {
+	databaseLinks, err := cfg.db.GetAllLinks(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("unable to get links from database", err)
 	}
 
 	links := []Link{}
@@ -74,5 +85,5 @@ func (cfg *apiConfig) handlerGetAllLinks(w http.ResponseWriter, r *http.Request)
 		})
 	}
 
-	respondWithJSON(w, http.StatusOK, links)
+	return links, nil
 }

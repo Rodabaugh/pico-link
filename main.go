@@ -57,7 +57,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/admin/", func(w http.ResponseWriter, r *http.Request) {
-		MainPage().Render(r.Context(), w)
+		MainPage(&apiCfg).Render(r.Context(), w)
 	})
 	mux.HandleFunc("GET /api/links", apiCfg.handlerGetAllLinks)
 	mux.HandleFunc("POST /api/links", apiCfg.handlerCreateLink)

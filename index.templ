@@ -16,7 +16,7 @@ templ head(){
     <head>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
-        <title>Another Brick</title>
+        <title>PicoLink</title>
     </head>
 }
 
@@ -27,12 +27,26 @@ templ header(){
     </div>
 }
 
-templ MainPage(){
+templ LinksList(links []Link, _ error){
+    <div id="links-list" class="links-list">
+        for _, link := range links{
+            <div class="link-item">
+                <hr>
+                <a href={templ.URL(link.LinkUrl)} style="color:#31748f">{link.LinkName} - {link.LinkUrl}</a></br>
+                <p>Created: {link.CreatedAt.Local().Format("2006-01-02")}</p>
+                <button hx-delete={"/api/links/" + link.ID.String()} hx-target="#links-list">Delete</button>
+            </div>
+        }
+    </div>
+}
+
+templ MainPage(cfg *apiConfig){
     <!DOCTYPE html>
     <html>
         @head()
         <body class={base()}>
             <center>@header()</center>
+            @LinksList(cfg.Links())
         </body>
     </html>
 }
