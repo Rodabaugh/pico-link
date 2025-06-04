@@ -61,6 +61,7 @@ func main() {
 	})
 	mux.HandleFunc("GET /api/links", apiCfg.handlerGetAllLinks)
 	mux.HandleFunc("POST /api/links", apiCfg.handlerCreateLink)
+	mux.HandleFunc("DELETE /api/links/{link_id}", apiCfg.handlerDeleteLink)
 
 	mux.HandleFunc("GET /google", handlerRedirect)
 

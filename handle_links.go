@@ -87,3 +87,29 @@ func (cfg *apiConfig) Links() ([]Link, error) {
 
 	return links, nil
 }
+
+func (cfg *apiConfig) handlerDeleteLink(w http.ResponseWriter, r *http.Request) {
+	rawLinkID := r.PathValue("link_id")
+	if rawLinkID == "" {
+		respondWithError(w, http.StatusBadRequest, "No link ID was provided", fmt.Errorf("no link id was provided"))
+		return
+	}
+
+	linkID, err := uuid.Parse(rawLinkID)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid link ID", err)
+	}
+
+	err = cfg.db.DeleteLinkByID(r.Context(), linkID)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Unable to delete link", err)
+		return
+	}
+
+	if r.Header.Get("Accept") == "application/json" {
+		respondWithJSON(w, http.StatusOK, Link{})
+		return
+	} else {
+		LinksList(cfg.Links()).Render(r.Context(), w)
+	}
+}
