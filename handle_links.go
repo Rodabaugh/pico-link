@@ -46,15 +46,19 @@ func (cfg *apiConfig) handlerCreateLink(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	respondWithJSON(w, http.StatusCreated, response{
-		Link: Link{
-			ID:        link.ID,
-			CreatedAt: link.CreatedAt,
-			UpdatedAt: link.UpdatedAt,
-			LinkName:  link.LinkName,
-			LinkUrl:   link.LinkUrl,
-		},
-	})
+	if r.Header.Get("Accept") == "application/json" {
+		respondWithJSON(w, http.StatusCreated, response{
+			Link: Link{
+				ID:        link.ID,
+				CreatedAt: link.CreatedAt,
+				UpdatedAt: link.UpdatedAt,
+				LinkName:  link.LinkName,
+				LinkUrl:   link.LinkUrl,
+			},
+		})
+	} else {
+		LinksList(cfg.Links()).Render(r.Context(), w)
+	}
 }
 
 func (cfg *apiConfig) handlerGetAllLinks(w http.ResponseWriter, r *http.Request) {

@@ -27,6 +27,30 @@ templ header(){
     </div>
 }
 
+templ newLink(){
+    <div class="link-form">
+        <form
+            hx-target="#links-list" 
+            hx-post="/api/links"
+            hx-ext="json-enc"
+        >
+            <input
+                type="text"
+                name="link_name"
+                placeholder="Link Name"
+                size="50"
+            />
+            <input
+                type="text"
+                name="link_url"
+                placeholder="Link Target URL"
+                size="50"
+            />
+            <button type="submit">Create Link</button>
+        </form>
+    </div>
+}
+
 templ LinksList(links []Link, _ error){
     <div id="links-list" class="links-list">
         for _, link := range links{
@@ -46,6 +70,7 @@ templ MainPage(cfg *apiConfig){
         @head()
         <body class={base()}>
             <center>@header()</center>
+            <center>@newLink()</center>
             @LinksList(cfg.Links())
         </body>
     </html>
