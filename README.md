@@ -68,8 +68,8 @@ Response body:
 ```
 
 ## GET /api/links
-```json
 Response body:
+```json
 [
 	{
 		"ID": "953b569d-4a26-43c9-ba29-2c9c431bf6f7",
